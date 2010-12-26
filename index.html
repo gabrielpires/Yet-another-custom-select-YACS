@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title>Yet another custom select</title>
+	<link href="css/YACS.css" type="text/css" rel="stylesheet">
+	<script src="js/YACS.js" type="text/javascript"></script>
+	
+</head>
+<body>
+	<select name="ddlContent" id="ddlContent">
+		<option value="1">Item 1</option>
+		<option value="2">Item 2</option>
+		<option value="3">Item 3</option>
+		<option value="4">Item 4</option>
+		<option value="5">Item 5</option>
+	</select>
+	<script type="text/javascript">
+		var args = {"onchange":function(){},"showEvent": "click"};
+		YACS.customize('ddlContent', args);
+	</script>
+</body>
+</html>

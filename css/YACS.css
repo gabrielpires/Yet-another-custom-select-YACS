@@ -1,0 +1,52 @@
+.custom-select{
+	postion:relative;
+	width:250px;
+	font-family:verdana;
+	cursor:pointer;
+}
+
+.custom-select-view{
+	display:block;
+	padding:0;
+	height:20px;
+	background:url(../images/background.png) no-repeat;
+	width:252px;
+	height:26px;
+}
+
+.custom-select-label{
+	width:252px;
+	height:26px;
+	padding:4px 0 0 10px;
+	display:block;
+	font-size:14px;
+	font-family:verdana;
+	color:#666;
+}
+
+.custom-select-list{
+	position:absolute;
+	top:34px;
+	left:17px;
+	border:solid 1px #818181;
+	border-top:0;
+	width:210px;
+	list-style:none;
+	margin:0;
+	padding:0;
+	background-color:#e2e2e2;
+	color:#666;
+	padding:10px;
+}
+
+.custom-select-item{
+	font-size:12px;
+}
+
+.custom-select-item-first{
+	
+}
+
+.custom-select-item-last{
+	
+}
