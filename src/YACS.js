@@ -1,3 +1,8 @@
+/*
+Project: YACS - Yet another custom html select
+Developer: Gabriel Pires - cadastro at gabrielpires.com.br
+Free to use, just keep the author.
+*/
 var YACS = {};
 (function(){
 	
@@ -8,6 +13,9 @@ var YACS = {};
 	YACS.content = {};
 	YACS.items = new Array();
 	YACS.elements = {};
+	
+	YACS.elements.boxes = new Array();
+	YACS.elements.currentIndex = 0;
 	
 	//PROPERTIES
 	YACS.callback =  function(){};
@@ -20,6 +28,7 @@ var YACS = {};
 		YACS.elements.original = YACS.control;
 		YACS.parseProperties(properties);
 		YACS.getContent();
+		YACS.elements.currentIndex++;
 	};
 	
 	YACS.createId = function(baseName)
@@ -69,24 +78,24 @@ var YACS = {};
 	{
 		//CREATE BOX
 		var box = document.createElement('div');
-		box.id = 'box_' + YACS.id;
+		box.id = YACS.id + '_box';
 		box.className = 'custom-select';
 		YACS.elements.box = box;
 		
 		//CREATE SELECT VIEW
 		var currentView = document.createElement('div');
-		currentView.id = 'currentView_' + YACS.id;
+		currentView.id = YACS.id + '_currentView';
 		currentView.className = 'custom-select-view';
 		YACS.elements.currentView = currentView;
 		
 		var currentContent = document.createElement('label');
-		currentContent.id = 'currentContent_' + YACS.id;
+		currentContent.id = YACS.id + '_currentContent_';
 		currentContent.className = 'custom-select-label';
 		YACS.elements.currentContent = currentContent;
 		
 		//CREATE CONTENT
 		var list = document.createElement('ul');
-		list.id = 'list_' + YACS.id;
+		list.id = YACS.id + '_list';
 		list.className = 'custom-select-list';
 		list.show = false;
 		var option;
@@ -143,6 +152,7 @@ var YACS = {};
 				{
 					YACS.showCustomList();
 					YACS.elements.list.show = true;	
+					alert(YACS.elements.box.id);
 				}
 				else
 				{
@@ -193,14 +203,14 @@ var YACS = {};
 		}
 	}
 	
-	YACS.hideOriginalControl = function()
-	{
-		YACS.control.style.display = 'none';
-	}
-	
 	YACS.showOriginalControl = function()
 	{
 		YACS.control.style.display = '';
+	}
+	
+	YACS.hideOriginalControl = function()
+	{
+		YACS.control.style.display = 'none';
 	}
 	
 	YACS.showCustomList = function()
