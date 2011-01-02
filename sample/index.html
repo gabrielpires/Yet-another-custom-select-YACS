@@ -15,21 +15,12 @@
 		<option value="4">Item 4</option>
 		<option value="5">Item 5</option>
 	</select>
-	<select name="ddlContent" id="ddlContent2">
-		<option value="1">Item 2 - 1</option>
-		<option value="2">Item 2 - 2</option>
-		<option value="3">Item 2 - 3</option>
-		<option value="4">Item 2 - 4</option>
-		<option value="5">Item 2 - 5</option>
-		<option value="5">Item 2 - 5</option>
-	</select>
 	<script type="text/javascript">
 		var callback = function(){
 			console.log(ddlContent.value);
 		}
 		var args = {"onchange":callback,"showEvent": "click"};
 		YACS.customize('ddlContent', args);
-		YACS.customize('ddlContent2');
 	</script>
 </body>
 </html>
