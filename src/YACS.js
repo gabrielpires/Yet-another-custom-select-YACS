@@ -14,95 +14,133 @@ var YACS = {};
 	YACS.items = new Array();
 	YACS.elements = {};
 	
-	YACS.elements.boxes = new Array();
-	YACS.elements.currentIndex = 0;
+	YACS.selects = new Array();
+	YACS.currentIndex = 0;
 	
 	//PROPERTIES
 	YACS.callback =  function(){};
 	YACS.showEvent = "click";
 	
-	YACS.customize = function(control, properties)
-	{
-		YACS.createId(control);
-		YACS.control = YACS.getEBI(control);
-		YACS.elements.original = YACS.control;
-		YACS.parseProperties(properties);
-		YACS.getContent();
-		YACS.elements.currentIndex++;
+	YACS.customize = function(control, options)
+	{		
+		customControl = {};
+		customControl.index = YACS.currentIndex;
+		customControl.id = YACS.createId(control);
+		customControl.select = YACS.getEBI(control);
+		customControl.callback = YACS.getCallBack(options);
+		customControl.showEvent = YACS.getShowEvent(options);
+		customControl.content = YACS.getContent(customControl.select);
+		customControl.elements = {};
+		customControl.elements.box = YACS.buildCustomControl(control, customControl);
+		
+		YACS.buildEvents(customControl);
+		
+		customControl.showControl = function(target)
+		{
+			target.style.display = '';
+		}
+
+		customControl.hideControl = function(target)
+		{
+			target.style.display = 'none';
+		}
+
+		customControl.hideControl(customControl.elements.list);
+		customControl.hideControl(customControl.select);
+		
+		YACS.selects.push(customControl);
+		YACS.incrementIndex();
 	};
+	
+	YACS.incrementIndex = function()
+	{
+		YACS.currentIndex++;
+	}
 	
 	YACS.createId = function(baseName)
 	{
-		YACS.id = 'yacs_' + baseName;
+		return 'yacs_' + baseName;
 	}
 	
-	YACS.parseProperties = function(properties)
+	YACS.getCallBack = function(options)
 	{
-		YACS.properties = properties;
+		var result = function(){};
 		
-		if(YACS.properties != null)
+		if(options != null || options != undefined)
 		{
-			if((YACS.properties.onchange != null || YACS.properties.onchange != undefined) && typeof(YACS.properties.onchange) == "function")
+			if((options.onchange != null || options.onchange != undefined) && typeof(options.onchange) == "function")
 			{
-				YACS.callback = YACS.properties.onchange;
+				result = options.onchange;
 			}
-			
-			if(YACS.properties.showEvent != null || 
-				YACS.properties.showEvent != undefined || 
-				YACS.properties.showEvent == "click" || 
-				YACS.properties.showEvent == "mouseover")
-				{
-					YACS.showEvent = YACS.properties.showEvent;
-				}
 		}
+		
+		return result;
 	}
 	
-	YACS.getContent = function()
+	YACS.getShowEvent = function(options)
 	{
-		var options = YACS.control.getElementsByTagName('option');
+		var result = 'click';
 		
-		var item;
-		for(var i = 0; i < options.length; i++)
+		if(options != null || options != undefined)
 		{
-			var option = options[i];
+			if(options.showEvent != null || 
+				options.showEvent != undefined || 
+				options.showEvent == "click" || 
+				options.showEvent == "mouseover")
+				{
+					result = options.showEvent;
+				}	
+		}
+
+		return result;		
+	}
+	
+	YACS.getContent = function(select)
+	{
+		var items = select.getElementsByTagName('option');
+		var result = new Array();
+		var item;
+		for(var i = 0; i < items.length; i++)
+		{
+			var option = items[i];
 			item = {};
 			item.value = option.value;
 			item.text = option.innerHTML;
-			YACS.items.push(item);
+			result.push(item);
 		}
 		
-		YACS.buildCustomControl();
+		return result;
 	}
 	
-	YACS.buildCustomControl = function()
+	YACS.buildCustomControl = function(control, customControl)
 	{
 		//CREATE BOX
 		var box = document.createElement('div');
-		box.id = YACS.id + '_box';
+		box.id = customControl.id + '_box';
 		box.className = 'custom-select';
-		YACS.elements.box = box;
+		customControl.elements.box = box;
 		
 		//CREATE SELECT VIEW
 		var currentView = document.createElement('div');
-		currentView.id = YACS.id + '_currentView';
+		currentView.id = customControl.id + '_currentView';
 		currentView.className = 'custom-select-view';
-		YACS.elements.currentView = currentView;
+		customControl.elements.currentView = currentView;
 		
 		var currentContent = document.createElement('label');
-		currentContent.id = YACS.id + '_currentContent_';
+		currentContent.id = customControl.id + '_currentContent_';
 		currentContent.className = 'custom-select-label';
-		YACS.elements.currentContent = currentContent;
-		
+		customControl.elements.currentContent = currentContent;
+
 		//CREATE CONTENT
 		var list = document.createElement('ul');
-		list.id = YACS.id + '_list';
+		list.id = customControl.id + '_list';
 		list.className = 'custom-select-list';
 		list.show = false;
 		var option;
 		var link;
-		for(var i = 0; i < YACS.items.length; i++)
+		for(var i = 0; i < customControl.content.length; i++)
 		{
-			var item = YACS.items[i];
+			var item = customControl.content[i];
 			console.log(item);
 			option = document.createElement('li');
 			option.innerHTML = item.text;
@@ -123,12 +161,13 @@ var YACS = {};
 			
 			list.appendChild(option);
 		}
-		YACS.elements.list = list;
+		
+		customControl.elements.list = list;
 		
 		//APPLY THE FIRST ITEM
-		if(YACS.elements.list.childNodes.length > 0)
+		if(customControl.content.length > 0)
 		{
-			YACS.elements.currentContent.innerHTML = YACS.elements.list.childNodes[0].innerHTML;
+			currentContent.innerHTML = customControl.content[0].text;
 		}
 		
 		//MOUNT CASCADE ELEMENTS
@@ -136,51 +175,55 @@ var YACS = {};
 		box.appendChild(currentView);
 		box.appendChild(list);
 		
-		//APPLY THE CUSTOM CONTROL IN THE INTERFACE
-		document.body.insertBefore(box, YACS.control);
-		YACS.hideCustomList();
-		YACS.buildEvents();
-		YACS.hideOriginalControl();		
+			
+		YACS.applyCustomControl(control,box);
+		
+		return box;
 	}
 	
-	YACS.buildEvents = function()
+	YACS.applyCustomControl = function(original, custom){
+		document.body.insertBefore(custom, original);
+	}
+	
+	YACS.buildEvents = function(customControl)
 	{
-		if(YACS.showEvent == "click")
+		
+		if(customControl.showEvent == "click")
 		{
-			YACS.elements.box.addEventListener("click", function(){
-				if(!YACS.elements.list.show)
+			customControl.elements.box.addEventListener("click", function(){
+				if(!customControl.elements.list.show)
 				{
-					YACS.showCustomList();
-					YACS.elements.list.show = true;	
-					alert(YACS.elements.box.id);
+					customControl.showControl(customControl.elements.list);
+					customControl.elements.list.show = true;	
+					console.log(customControl.elements.box.id);
 				}
 				else
 				{
-					YACS.hideCustomList();
-					YACS.elements.list.show = false;
+					customControl.hideControl(customControl.elements.list);
+					customControl.elements.list.show = false;
 				}
 
 			});
 		}
 		else
 		{
-			YACS.elements.box.addEventListener("mouseover", function(){
-				YACS.showCustomList();
-				YACS.elements.list.show = true;
+			customControl.elements.box.addEventListener("mouseover", function(){
+				customControl.showControl(customControl.elements.list);
+				customControl.elements.list.show = true;
 			});
 			
-			YACS.elements.box.addEventListener("mouseout", function(){
-				YACS.hideCustomList();
-				YACS.elements.list.show = false;
+			customControl.elements.box.addEventListener("mouseout", function(){
+				customControl.hideControl(customControl.elements.list);
+				customControl.elements.list.show = false;
 			});
 		}
 
 		
 		var item;
-		for(var i = 0; i < YACS.elements.list.childNodes.length; i++)
+		for(var i = 0; i < customControl.elements.list.childNodes.length; i++)
 		{
-			console.log(YACS.elements.list.childNodes[i].innerHTML);
-			item = YACS.elements.list.childNodes[i];
+			console.log(customControl.elements.list.childNodes[i].innerHTML);
+			item = customControl.elements.list.childNodes[i];
 			item.addEventListener("click", function(e){
 				
 				//AVOID BUBBLE EFFECT 
@@ -195,33 +238,16 @@ var YACS = {};
 					e.stopPropagation();
 				};
 				
-				YACS.elements.currentContent.innerHTML = this.innerHTML;
-				YACS.elements.original.value = this.value;
-				YACS.hideCustomList();
-				YACS.callback();
+				customControl.elements.currentContent.innerHTML = this.innerHTML;
+				customControl.select.value = this.value;
+				customControl.hideControl(customControl.elements.list);
+				customControl.elements.list.show = false;
+				customControl.callback();
 			}, true);
 		}
 	}
 	
-	YACS.showOriginalControl = function()
-	{
-		YACS.control.style.display = '';
-	}
-	
-	YACS.hideOriginalControl = function()
-	{
-		YACS.control.style.display = 'none';
-	}
-	
-	YACS.showCustomList = function()
-	{
-		YACS.elements.list.style.display = '';
-	}
-	
-	YACS.hideCustomList = function()
-	{
-		YACS.elements.list.style.display = 'none';
-	}
+
 	
 	YACS.getEBI = function(name)
 	{

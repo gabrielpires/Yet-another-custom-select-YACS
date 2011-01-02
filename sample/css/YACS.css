@@ -18,6 +18,7 @@ Free to use, just keep the author.
 	background:url(../images/background.png) no-repeat;
 	width:252px;
 	height:26px;
+	cursor:pointer;
 }
 
 .custom-select-label{
@@ -28,6 +29,7 @@ Free to use, just keep the author.
 	font-size:14px;
 	font-family:verdana;
 	color:#666;
+	cursor:pointer;
 }
 
 .custom-select-list{

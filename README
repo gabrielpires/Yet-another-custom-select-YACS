@@ -1,0 +1,38 @@
+YEY Coders,
+
+This is my new plugin: Yet another custom HTML select control.
+
+Is simple and easy to use.
+Please developer: If you fork my code and change it, tell me why and what. Just to exchange ideas :)
+
+Using de YACS:
+
+1 - Import the script file: YACS-min.js 
+2 - Write and populate your select control.
+3 - Add in end of code the follow command: 
+
+<script type="text/javascript">
+	YACS.customize('SELECT_ID');
+</script>
+
+4 - Customize the CSS: YACS.css and done.
+
+PS:
+
+You can pass an array of options when you call the customize method:
+
+Callback: Function that will be called after the select action.
+showEvent: "click" or "mouseover" (this option change the way that list will open).
+
+<script type="text/javascript">
+	var callback = function(){
+		alert('SELECTED ITEM');
+	}
+	
+	var showEvent = "click";
+	var args = {"onchange":callback,"showEvent": showEvent};
+
+	YACS.customize("SELECT_ID", args);
+</script>
+
+
