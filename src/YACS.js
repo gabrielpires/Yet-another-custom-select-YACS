@@ -31,7 +31,7 @@ var YACS = {};
 		customControl.showEvent = YACS.getShowEvent(options);
 		customControl.content = YACS.getContent(customControl.select);
 		customControl.elements = {};
-		customControl.elements.box = YACS.buildCustomControl(control, customControl);
+		customControl.elements.box = YACS.buildCustomControl(customControl.select, customControl);
 		
 		YACS.buildEvents(customControl);
 		
@@ -175,7 +175,7 @@ var YACS = {};
 		box.appendChild(currentView);
 		box.appendChild(list);
 		
-			
+		console.log(control);
 		YACS.applyCustomControl(control,box);
 		
 		return box;
@@ -203,19 +203,19 @@ var YACS = {};
 					customControl.elements.list.show = false;
 				}
 
-			});
+			}, true);
 		}
 		else
 		{
 			customControl.elements.box.addEventListener("mouseover", function(){
 				customControl.showControl(customControl.elements.list);
 				customControl.elements.list.show = true;
-			});
+			}, true);
 			
 			customControl.elements.box.addEventListener("mouseout", function(){
 				customControl.hideControl(customControl.elements.list);
 				customControl.elements.list.show = false;
-			});
+			}, true);
 		}
 
 		

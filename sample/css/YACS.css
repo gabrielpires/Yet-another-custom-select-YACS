@@ -1,60 +1,69 @@
-/*
-Project: YACS - Yet another custom html select
+/* Project: YACS - Yet another custom html select
 Developer: Gabriel Pires - cadastro at gabrielpires.com.br
-Free to use, just keep the author.
-*/
+Free to use, just keep the author. */
 
-.custom-select{
-	postion:relative;
-	width:250px;
-	font-family:verdana;
-	cursor:pointer;
-}
+/* reset */
+* {
+margin:0;
+padding:0;
+list-style:none;
+border:0;
+outline:0;
+font-size:100%;
+vertical-align:baseline;
+background:transparent }
 
-.custom-select-view{
-	display:block;
-	padding:0;
-	height:20px;
-	background:url(../images/background.png) no-repeat;
-	width:252px;
-	height:26px;
-	cursor:pointer;
-}
+body { font:12px verdana }
 
-.custom-select-label{
-	width:252px;
-	height:26px;
-	padding:4px 0 0 10px;
-	display:block;
-	font-size:14px;
-	font-family:verdana;
-	color:#666;
-	cursor:pointer;
-}
+/* container */
+#container {
+width:900px;
+margin:0 auto }
 
-.custom-select-list{
-	position:absolute;
-	top:34px;
-	left:17px;
-	border:solid 1px #818181;
-	border-top:0;
-	width:210px;
-	list-style:none;
-	margin:0;
-	padding:0;
-	background-color:#e2e2e2;
-	color:#666;
-	padding:10px;
-}
+/* container do select customizado */
+.custom-select {
+position:relative;
+width:469px;
+cursor:pointer;margin:20px;}
 
-.custom-select-item{
-	font-size:12px;
-}
+/* div que Ž o select customizado */
+.custom-select-view {
+background:url(../images/bg-select.png) no-repeat;
+display:block;
+width:469px;
+height:22px;
+cursor:pointer }
 
-.custom-select-item-first{
-	
-}
+/* label que Ž o option 1 */
+.custom-select-label {
+display:block;
+width:252px;
+height:26px;
+padding:4px 0 0 10px;
+color:#666;
+cursor:pointer }
 
-.custom-select-item-last{
-	
-}
+/* lista de elementos option */
+.custom-select-list {
+background:#f7f6f4;
+position:absolute;
+top:22px;
+left:0;
+width:439px;
+border:solid 1px #e9e8e6;
+border-top:0;
+list-style:none;
+color:#666;z-index:9999; }
+
+/* elemento da lista */
+.custom-select-item {
+padding:5px 10px;
+font-size:12px }
+
+.custom-select-item:hover { background:#dbdbdb }
+
+/* primeiro elemento */
+.custom-select-item-first { }
+
+/* œltimo elemento */
+.custom-select-item-last { }
