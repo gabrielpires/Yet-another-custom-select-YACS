@@ -4,6 +4,11 @@ Developer: Gabriel Pires - cadastro at gabrielpires.com.br
 Free to use, just keep the author.
 */
 var YACS = {};
+var console;
+if(typeof console == 'undefined')
+{
+	console = {log: function(){}};
+}
 (function(){
 	
 	//CONTROLS
@@ -23,6 +28,7 @@ var YACS = {};
 	
 	YACS.customize = function(control, options)
 	{		
+
 		customControl = {};
 		customControl.index = YACS.currentIndex;
 		customControl.id = YACS.createId(control);
@@ -34,7 +40,7 @@ var YACS = {};
 		customControl.elements.box = YACS.buildCustomControl(customControl.select, customControl);
 		
 		YACS.buildEvents(customControl);
-		
+				
 		customControl.showControl = function(target)
 		{
 			target.style.display = '';
@@ -114,6 +120,7 @@ var YACS = {};
 	
 	YACS.buildCustomControl = function(control, customControl)
 	{
+
 		//CREATE BOX
 		var box = document.createElement('div');
 		box.id = customControl.id + '_box';
@@ -138,6 +145,7 @@ var YACS = {};
 		list.show = false;
 		var option;
 		var link;
+		
 		for(var i = 0; i < customControl.content.length; i++)
 		{
 			var item = customControl.content[i];
@@ -182,15 +190,24 @@ var YACS = {};
 	}
 	
 	YACS.applyCustomControl = function(original, custom){
-		document.body.insertBefore(custom, original);
+		original.parentNode.insertBefore(custom,original);
 	}
 	
 	YACS.buildEvents = function(customControl)
 	{
+
 		
 		if(customControl.showEvent == "click")
 		{
-			customControl.elements.box.addEventListener("click", function(){
+
+			var onClickFunction = function(e){
+				var target = e.target || e.srcElement;
+
+				if(target != this)
+				{
+					return;
+				}
+				
 				if(!customControl.elements.list.show)
 				{
 					customControl.showControl(customControl.elements.list);
@@ -203,51 +220,67 @@ var YACS = {};
 					customControl.elements.list.show = false;
 				}
 
-			}, true);
+			};
+			
+			YACS.addEvent(customControl.elements.currentView, 'click', onClickFunction);
+
 		}
 		else
 		{
-			customControl.elements.box.addEventListener("mouseover", function(){
+			
+			var mouseOverFunction = function(){
 				customControl.showControl(customControl.elements.list);
 				customControl.elements.list.show = true;
-			}, true);
+			};
 			
-			customControl.elements.box.addEventListener("mouseout", function(){
+			var mouseOutFunction = function(){
 				customControl.hideControl(customControl.elements.list);
 				customControl.elements.list.show = false;
-			}, true);
+			};
+			
+			YACS.addEvent(customControl.elements.box,'mouseover',mouseOverFunction);
+			YACS.addEvent(customControl.elements.box,'onmouseout',mouseOutFunction);
 		}
 
+		var onClickItemFunction = function(e){
+			
+			
+			customControl.elements.currentContent.innerHTML = this.innerHTML;
+			customControl.select.value = this.value;
+			customControl.hideControl(customControl.elements.list);
+			customControl.elements.list.show = false;
+			customControl.callback();
+		};
 		
 		var item;
 		for(var i = 0; i < customControl.elements.list.childNodes.length; i++)
 		{
 			console.log(customControl.elements.list.childNodes[i].innerHTML);
 			item = customControl.elements.list.childNodes[i];
-			item.addEventListener("click", function(e){
-				
-				//AVOID BUBBLE EFFECT 
-				if (!e) 
-				{
-					var e = window.event;
-					e.cancelBubble = true;
-				};
-				
-				if (e.stopPropagation) 
-				{
-					e.stopPropagation();
-				};
-				
-				customControl.elements.currentContent.innerHTML = this.innerHTML;
-				customControl.select.value = this.value;
-				customControl.hideControl(customControl.elements.list);
-				customControl.elements.list.show = false;
-				customControl.callback();
-			}, true);
+			
+			YACS.addEvent(item, "click", onClickItemFunction);
 		}
 	}
 	
-
+	YACS.addEvent = function(control, event, event_function){
+		var callback = function(e)
+		{
+			if(!e)
+			{
+				e = window.event;
+			}
+			event_function.call(control, e);
+		};
+		if(typeof control.attachEvent != 'undefined')
+		{
+			event = "on" + event;
+			control.attachEvent(event,callback);
+		}
+		else
+		{
+			control.addEventListener(event, callback, false);
+		}
+	}
 	
 	YACS.getEBI = function(name)
 	{
