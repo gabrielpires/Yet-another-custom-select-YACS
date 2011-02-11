@@ -134,7 +134,7 @@ if(typeof console == 'undefined')
 		customControl.elements.currentView = currentView;
 		
 		var currentContent = document.createElement('label');
-		currentContent.id = customControl.id + '_currentContent_';
+		currentContent.id = customControl.id + '_currentContent';
 		currentContent.className = 'custom-select-label';
 		customControl.elements.currentContent = currentContent;
 
@@ -202,7 +202,9 @@ if(typeof console == 'undefined')
 
 			var onClickFunction = function(e){
 				var target = e.target || e.srcElement;
-
+				
+				console.log(target);
+				
 				if(target != this)
 				{
 					return;
@@ -223,7 +225,7 @@ if(typeof console == 'undefined')
 			};
 			
 			YACS.addEvent(customControl.elements.currentView, 'click', onClickFunction);
-
+			YACS.addEvent(customControl.elements.currentContent, 'click', onClickFunction);
 		}
 		else
 		{
@@ -247,6 +249,7 @@ if(typeof console == 'undefined')
 			
 			customControl.elements.currentContent.innerHTML = this.innerHTML;
 			customControl.select.value = this.value;
+			console.log(customControl.select.value);
 			customControl.hideControl(customControl.elements.list);
 			customControl.elements.list.show = false;
 			customControl.callback();
