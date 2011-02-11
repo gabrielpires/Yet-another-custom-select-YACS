@@ -2,12 +2,12 @@ YEY Coders,
 
 This is my new plugin: Yet another custom HTML select control.
 
-Is simple and easy to use.
+It's simple and easy to use.
 Please developer: If you fork my code and change it, tell me why and what. Just to exchange ideas :)
 
 Using de YACS:
 
-1 - Import the script file: YACS-min.js 
+1 - Import the script file: YACS-min.js (in the sample folder)
 2 - Write and populate your select control.
 3 - Add in end of code the follow command: 
 
@@ -29,7 +29,7 @@ showEvent: "click" or "mouseover" (this option change the way that list will ope
 		alert('SELECTED ITEM');
 	}
 	
-	var showEvent = "click";
+	var showEvent = "mouseover";
 	var args = {"onchange":callback,"showEvent": showEvent};
 
 	YACS.customize("SELECT_ID", args);
