@@ -146,10 +146,12 @@ if(typeof console == 'undefined')
 		var option;
 		var link;
 		
+		var selected_item = null;
+		
 		for(var i = 0; i < customControl.content.length; i++)
 		{
 			var item = customControl.content[i];
-			console.log(item);
+
 			option = document.createElement('li');
 			option.innerHTML = item.text;
 			option.value = item.value;
@@ -168,22 +170,23 @@ if(typeof console == 'undefined')
 			}
 			
 			list.appendChild(option);
+	
 		}
 		
 		customControl.elements.list = list;
 		
 		//APPLY THE FIRST ITEM
+		
 		if(customControl.content.length > 0)
 		{
-			currentContent.innerHTML = customControl.content[0].text;
+			currentContent.innerHTML = customControl.select[customControl.select.selectedIndex].text;
 		}
 		
 		//MOUNT CASCADE ELEMENTS
 		currentView.appendChild(currentContent);
 		box.appendChild(currentView);
 		box.appendChild(list);
-		
-		console.log(control);
+
 		YACS.applyCustomControl(control,box);
 		
 		return box;
@@ -203,7 +206,7 @@ if(typeof console == 'undefined')
 			var onClickFunction = function(e){
 				var target = e.target || e.srcElement;
 				
-				console.log(target);
+	
 				
 				if(target != this)
 				{
@@ -214,7 +217,7 @@ if(typeof console == 'undefined')
 				{
 					customControl.showControl(customControl.elements.list);
 					customControl.elements.list.show = true;	
-					console.log(customControl.elements.box.id);
+
 				}
 				else
 				{
@@ -249,7 +252,7 @@ if(typeof console == 'undefined')
 			
 			customControl.elements.currentContent.innerHTML = this.innerHTML;
 			customControl.select.value = this.value;
-			console.log(customControl.select.value);
+
 			customControl.hideControl(customControl.elements.list);
 			customControl.elements.list.show = false;
 			customControl.callback();
@@ -258,7 +261,7 @@ if(typeof console == 'undefined')
 		var item;
 		for(var i = 0; i < customControl.elements.list.childNodes.length; i++)
 		{
-			console.log(customControl.elements.list.childNodes[i].innerHTML);
+		
 			item = customControl.elements.list.childNodes[i];
 			
 			YACS.addEvent(item, "click", onClickItemFunction);
