@@ -9,7 +9,7 @@ Using de YACS:
 
 1 - Import the script file: YACS-min.js (in the sample folder)
 2 - Write and populate your select control.
-3 - Add in end of code the follow command: 
+3 - Add in end of code the follow command:
 
 <script type="text/javascript">
 	YACS.customize('SELECT_ID');
@@ -28,7 +28,7 @@ showEvent: "click" or "mouseover" (this option change the way that list will ope
 	var callback = function(){
 		alert('SELECTED ITEM');
 	}
-	
+
 	var showEvent = "mouseover";
 	var args = {"onchange":callback,"showEvent": showEvent};
 

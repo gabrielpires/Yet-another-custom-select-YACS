@@ -10,7 +10,7 @@ if(typeof console == 'undefined')
 	console = {log: function(){}};
 }
 (function(){
-	
+
 	//CONTROLS
 	YACS.id = '';
 	YACS.control = null;
@@ -18,16 +18,16 @@ if(typeof console == 'undefined')
 	YACS.content = {};
 	YACS.items = new Array();
 	YACS.elements = {};
-	
+
 	YACS.selects = new Array();
 	YACS.currentIndex = 0;
-	
+
 	//PROPERTIES
 	YACS.callback =  function(){};
 	YACS.showEvent = "click";
-	
+
 	YACS.customize = function(control, options)
-	{		
+	{
 
 		customControl = {};
 		customControl.index = YACS.currentIndex;
@@ -38,9 +38,9 @@ if(typeof console == 'undefined')
 		customControl.content = YACS.getContent(customControl.select);
 		customControl.elements = {};
 		customControl.elements.box = YACS.buildCustomControl(customControl.select, customControl);
-		
+
 		YACS.buildEvents(customControl);
-				
+
 		customControl.showControl = function(target)
 		{
 			target.style.display = '';
@@ -53,25 +53,25 @@ if(typeof console == 'undefined')
 
 		customControl.hideControl(customControl.elements.list);
 		customControl.hideControl(customControl.select);
-		
+
 		YACS.selects.push(customControl);
 		YACS.incrementIndex();
 	};
-	
+
 	YACS.incrementIndex = function()
 	{
 		YACS.currentIndex++;
 	}
-	
+
 	YACS.createId = function(baseName)
 	{
 		return 'yacs_' + baseName;
 	}
-	
+
 	YACS.getCallBack = function(options)
 	{
 		var result = function(){};
-		
+
 		if(options != null || options != undefined)
 		{
 			if((options.onchange != null || options.onchange != undefined) && typeof(options.onchange) == "function")
@@ -79,28 +79,28 @@ if(typeof console == 'undefined')
 				result = options.onchange;
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	YACS.getShowEvent = function(options)
 	{
 		var result = 'click';
-		
+
 		if(options != null || options != undefined)
 		{
-			if(options.showEvent != null || 
-				options.showEvent != undefined || 
-				options.showEvent == "click" || 
+			if(options.showEvent != null ||
+				options.showEvent != undefined ||
+				options.showEvent == "click" ||
 				options.showEvent == "mouseover")
 				{
 					result = options.showEvent;
-				}	
+				}
 		}
 
-		return result;		
+		return result;
 	}
-	
+
 	YACS.getContent = function(select)
 	{
 		var items = select.getElementsByTagName('option');
@@ -114,10 +114,10 @@ if(typeof console == 'undefined')
 			item.text = option.innerHTML;
 			result.push(item);
 		}
-		
+
 		return result;
 	}
-	
+
 	YACS.buildCustomControl = function(control, customControl)
 	{
 
@@ -126,13 +126,13 @@ if(typeof console == 'undefined')
 		box.id = customControl.id + '_box';
 		box.className = 'custom-select';
 		customControl.elements.box = box;
-		
+
 		//CREATE SELECT VIEW
 		var currentView = document.createElement('div');
 		currentView.id = customControl.id + '_currentView';
 		currentView.className = 'custom-select-view';
 		customControl.elements.currentView = currentView;
-		
+
 		var currentContent = document.createElement('label');
 		currentContent.id = customControl.id + '_currentContent';
 		currentContent.className = 'custom-select-label';
@@ -145,9 +145,9 @@ if(typeof console == 'undefined')
 		list.show = false;
 		var option;
 		var link;
-		
+
 		var selected_item = null;
-		
+
 		for(var i = 0; i < customControl.content.length; i++)
 		{
 			var item = customControl.content[i];
@@ -155,7 +155,7 @@ if(typeof console == 'undefined')
 			option = document.createElement('li');
 			option.innerHTML = item.text;
 			option.value = item.value;
-			
+
 			if(i == 0)
 			{
 				option.className = 'custom-select-item custom-select-item-first';
@@ -168,55 +168,55 @@ if(typeof console == 'undefined')
 			{
 				option.className = 'custom-select-item';
 			}
-			
+
 			list.appendChild(option);
-	
+
 		}
-		
+
 		customControl.elements.list = list;
-		
+
 		//APPLY THE FIRST ITEM
-		
+
 		if(customControl.content.length > 0)
 		{
 			currentContent.innerHTML = customControl.select[customControl.select.selectedIndex].text;
 		}
-		
+
 		//MOUNT CASCADE ELEMENTS
 		currentView.appendChild(currentContent);
 		box.appendChild(currentView);
 		box.appendChild(list);
 
 		YACS.applyCustomControl(control,box);
-		
+
 		return box;
 	}
-	
+
 	YACS.applyCustomControl = function(original, custom){
 		original.parentNode.insertBefore(custom,original);
 	}
-	
+
 	YACS.buildEvents = function(customControl)
 	{
 
-		
+
 		if(customControl.showEvent == "click")
 		{
 
 			var onClickFunction = function(e){
 				var target = e.target || e.srcElement;
-				
-	
-				
+
+
+
 				if(target != this)
 				{
 					return;
 				}
-				
+
 				if(!customControl.elements.list.show)
 				{
 					customControl.showControl(customControl.elements.list);
-					customControl.elements.list.show = true;	
+					customControl.elements.list.show = true;
 
 				}
 				else
@@ -226,30 +226,30 @@ if(typeof console == 'undefined')
 				}
 
 			};
-			
+
 			YACS.addEvent(customControl.elements.currentView, 'click', onClickFunction);
 			YACS.addEvent(customControl.elements.currentContent, 'click', onClickFunction);
 		}
 		else
 		{
-			
+
 			var mouseOverFunction = function(){
 				customControl.showControl(customControl.elements.list);
 				customControl.elements.list.show = true;
 			};
-			
+
 			var mouseOutFunction = function(){
 				customControl.hideControl(customControl.elements.list);
 				customControl.elements.list.show = false;
 			};
-			
+
 			YACS.addEvent(customControl.elements.box,'mouseover',mouseOverFunction);
 			YACS.addEvent(customControl.elements.box,'onmouseout',mouseOutFunction);
 		}
 
 		var onClickItemFunction = function(e){
-			
-			
+
+
 			customControl.elements.currentContent.innerHTML = this.innerHTML;
 			customControl.select.value = this.value;
 
@@ -257,17 +257,17 @@ if(typeof console == 'undefined')
 			customControl.elements.list.show = false;
 			customControl.callback();
 		};
-		
+
 		var item;
 		for(var i = 0; i < customControl.elements.list.childNodes.length; i++)
 		{
-		
+
 			item = customControl.elements.list.childNodes[i];
-			
+
 			YACS.addEvent(item, "click", onClickItemFunction);
 		}
 	}
-	
+
 	YACS.addEvent = function(control, event, event_function){
 		var callback = function(e)
 		{
@@ -287,10 +287,10 @@ if(typeof console == 'undefined')
 			control.addEventListener(event, callback, false);
 		}
 	}
-	
+
 	YACS.getEBI = function(name)
 	{
 		return document.getElementById(name);
 	}
-	
+
 })();
